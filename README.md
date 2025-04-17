@@ -39,3 +39,33 @@ Install the required libraries by running:
 
 ```bash
 pip install pyqt5 cryptography
+  
+## How to Use GuardDex
+
+### Run the Application:
+1. Install the required dependencies
+2. Open the project folder and run `main.py` to launch the GUI
+
+### Encrypt a Message:
+1. Enter your plain text
+2. Enter your encryption key (keep this secret!)
+3. Click "Encrypt" to get the Base64-encoded message
+
+### Decrypt a Message:
+1. Paste the Base64-encoded message
+2. Enter the decryption key (same as encryption key)
+3. Click "Decrypt" to reveal the original message
+
+### Copy & Share:
+- Copy the encrypted message and share it via any medium
+- Only recipients with the key can decrypt it
+
+## Example Use Case
+Protect sensitive documents or private conversations by encrypting messages. Only trusted recipients with the key can decrypt them, ensuring secure communication.
+
+## Installation
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/your-username/GuardDex.git
+cd GuardDex
