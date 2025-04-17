@@ -70,3 +70,13 @@ Protect sensitive documents or private conversations by encrypting messages. Onl
 ```bash
 git clone https://github.com/your-username/GuardDex.git
 cd GuardDex
+```
+### 2. Run the Application
+Launch the application 
+`YOUR GuardDex.exe`
+
+## Authors
+
+- **Abdelouahed** - _Creator, Developer_  
+  This project was developed by me, and I will continue to maintain and update it with new features and improvements whenever I have new ideas. Feel free to contribute, or reach out if you have any suggestions!  
+  - [Your GitHub Profile](https://github.com/Abdelouahed)
