@@ -39,6 +39,7 @@ Install the required libraries by running:
 
 ```bash
 pip install pyqt5 cryptography
+```
   
 ## How to Use GuardDex
 
