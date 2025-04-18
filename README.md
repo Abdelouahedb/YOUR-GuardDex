@@ -45,7 +45,7 @@ pip install pyqt5 cryptography
 
 ### Run the Application:
 1. Install the required dependencies
-2. Open the project folder and run `YOUR GuardDex.exe` to launch the GUI
+2. Open the project folder and run `YOUR GuardDex.exe` to launch the GUI OR the python code `main_code.py`
 
 ### Encrypt a Message:
 1. Enter your plain text
