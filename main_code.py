@@ -5,6 +5,8 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtCore import Qt
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.backends import default_backend
 import base64
 import os
@@ -16,7 +18,7 @@ def pad(text):
 def unpad(text):
     return text.rstrip()
 
-def encrypt(text, key):
+def encrypt_legacy(text, key):
     key = key.encode().ljust(32, b'\0')[:32]
     iv = os.urandom(16)
     cipher = Cipher(algorithms.AES(key), modes.CFB(iv), backend=default_backend())
@@ -25,7 +27,7 @@ def encrypt(text, key):
     encrypted = iv + encryptor.update(padded_text) + encryptor.finalize()
     return base64.b64encode(encrypted).decode()
 
-def decrypt(encrypted_text, key):
+def decrypt_legacy(encrypted_text, key):
     key = key.encode().ljust(32, b'\0')[:32]
     encrypted_data = base64.b64decode(encrypted_text)
     iv = encrypted_data[:16]
@@ -33,6 +35,39 @@ def decrypt(encrypted_text, key):
     decryptor = cipher.decryptor()
     decrypted = decryptor.update(encrypted_data[16:]) + decryptor.finalize()
     return unpad(decrypted.decode())
+
+def derive_key(key: str, salt: bytes) -> bytes:
+    kdf = PBKDF2HMAC(
+        algorithm=hashes.SHA256(),
+        length=32,
+        salt=salt,
+        iterations=100000,
+        backend=default_backend()
+    )
+    return kdf.derive(key.encode())
+
+def encrypt_v2(text, key):
+    salt = os.urandom(16)
+    iv = os.urandom(12)
+    derived_key = derive_key(key, salt)
+    cipher = Cipher(algorithms.AES(derived_key), modes.GCM(iv), backend=default_backend())
+    encryptor = cipher.encryptor()
+    ciphertext = encryptor.update(text.encode('utf-8')) + encryptor.finalize()
+    encrypted_data = salt + iv + encryptor.tag + ciphertext
+    return "v2:" + base64.b64encode(encrypted_data).decode('utf-8')
+
+def decrypt_v2(encrypted_text, key):
+    encrypted_text = encrypted_text[3:]
+    data = base64.b64decode(encrypted_text)
+    salt = data[:16]
+    iv = data[16:28]
+    tag = data[28:44]
+    ciphertext = data[44:]
+    derived_key = derive_key(key, salt)
+    cipher = Cipher(algorithms.AES(derived_key), modes.GCM(iv, tag), backend=default_backend())
+    decryptor = cipher.decryptor()
+    decrypted = decryptor.update(ciphertext) + decryptor.finalize()
+    return decrypted.decode('utf-8')
 
 # Main GUI Application
 class AESApp(QWidget):
@@ -166,6 +201,36 @@ class AESApp(QWidget):
         self.result_output.setPlaceholderText("Result will appear here...")
         main_layout.addWidget(self.result_output)
 
+        # Action Buttons Layout (Copy & Clear)
+        action_layout = QHBoxLayout()
+        action_layout.setSpacing(15)
+
+        copy_button = QPushButton("COPY RESULT")
+        copy_button.setStyleSheet("""
+            background-color: #2A2A2A;
+            color: #E0E0E0;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 13px;
+        """)
+        copy_button.clicked.connect(self.copy_result)
+        action_layout.addWidget(copy_button)
+
+        clear_button = QPushButton("CLEAR ALL")
+        clear_button.setStyleSheet("""
+            background-color: #2A2A2A;
+            color: #E0E0E0;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 13px;
+        """)
+        clear_button.clicked.connect(self.clear_all)
+        action_layout.addWidget(clear_button)
+
+        main_layout.addLayout(action_layout)
+
         self.setLayout(main_layout)
     
     def encrypt_text(self):
@@ -175,24 +240,40 @@ class AESApp(QWidget):
             QMessageBox.warning(self, "Input Error", "Please provide both text and key.")
             return
         try:
-            encrypted = encrypt(text, key)
+            encrypted = encrypt_v2(text, key)
             self.result_output.setPlainText(encrypted)
             self.result_output.setStyleSheet("background-color: #1D1D1D; color: #C41E3A;")
         except Exception as e:
             QMessageBox.critical(self, "Error", "Something went wrong !!!")
 
     def decrypt_text(self):
-        encrypted_text = self.text_input.toPlainText()
+        encrypted_text = self.text_input.toPlainText().strip()
         key = self.key_input.text()
         if not encrypted_text or not key:
             QMessageBox.warning(self, "Input Error", "Please provide both encrypted text and key.")
             return
         try:
-            decrypted = decrypt(encrypted_text, key)
+            if encrypted_text.startswith("v2:"):
+                decrypted = decrypt_v2(encrypted_text, key)
+            else:
+                decrypted = decrypt_legacy(encrypted_text, key)
             self.result_output.setPlainText(decrypted)
             self.result_output.setStyleSheet("background-color: #1D1D1D; color: #50C878;")
         except Exception as e:
             QMessageBox.critical(self, "Error", "Check the key and try again.")
+
+    def copy_result(self):
+        text = self.result_output.toPlainText()
+        if text:
+            clipboard = QApplication.clipboard()
+            clipboard.setText(text)
+            QMessageBox.information(self, "Copied", "Result copied to clipboard!")
+
+    def clear_all(self):
+        self.text_input.clear()
+        self.key_input.clear()
+        self.result_output.clear()
+        self.result_output.setStyleSheet("background-color: #1D1D1D; color: #D0D0D0;")
 
 # Run the Application
 if __name__ == "__main__":
