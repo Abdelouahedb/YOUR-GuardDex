@@ -150,8 +150,7 @@ tabEncrypt.addEventListener('click', () => {
     messageLabel.innerText = 'Enter Text to Encrypt:';
     messageInput.placeholder = 'Enter your secret message here...';
     actionBtn.innerHTML = '<i class="fa-solid fa-lock"></i> ENCRYPT';
-    actionBtn.style.backgroundColor = 'var(--primary-color)';
-    actionBtn.style.border = 'none';
+    actionBtn.classList.remove('decrypt-mode');
 });
 
 tabDecrypt.addEventListener('click', () => {
@@ -161,8 +160,7 @@ tabDecrypt.addEventListener('click', () => {
     messageLabel.innerText = 'Enter Text to Decrypt:';
     messageInput.placeholder = 'Paste encrypted text here (starts with v2:)...';
     actionBtn.innerHTML = '<i class="fa-solid fa-lock-open"></i> DECRYPT';
-    actionBtn.style.backgroundColor = '#1E1E1E';
-    actionBtn.style.border = '1px solid var(--border-color)';
+    actionBtn.classList.add('decrypt-mode');
 });
 
 // Toggle Password Visibility

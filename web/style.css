@@ -1,15 +1,16 @@
 :root {
-    --bg-color: #0d0d0d;
-    --panel-bg: rgba(29, 29, 29, 0.7);
-    --primary-color: #9B1C31;
-    --primary-hover: #c92440;
-    --text-color: #E0E0E0;
-    --text-muted: #909090;
-    --border-color: #2A2A2A;
-    --border-focus: #880000;
-    --success-color: #50C878;
-    --error-color: #C41E3A;
-    --glass-border: rgba(255, 255, 255, 0.05);
+    --bg-color: #050505;
+    --panel-bg: rgba(20, 20, 20, 0.6);
+    --primary-color: #E63946;
+    --primary-gradient: linear-gradient(135deg, #E63946 0%, #9B1C31 100%);
+    --primary-hover: linear-gradient(135deg, #F15A65 0%, #B8253E 100%);
+    --text-color: #F8F9FA;
+    --text-muted: #A0AEC0;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-focus: #E63946;
+    --success-color: #10B981;
+    --error-color: #EF4444;
+    --glass-border: rgba(255, 255, 255, 0.1);
 }
 
 * {
@@ -19,96 +20,94 @@
 }
 
 body {
-    font-family: 'Montserrat', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', 'Segoe UI', system-ui, sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: radial-gradient(circle at top, #1a0508 0%, var(--bg-color) 70%);
+    background-image: radial-gradient(circle at 50% 0%, rgba(155, 28, 49, 0.15) 0%, var(--bg-color) 60%);
+    background-attachment: fixed;
 }
 
 .container {
     width: 100%;
-    max-width: 600px;
+    max-width: 560px;
     padding: 20px;
 }
 
 header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 35px;
 }
 
 .logo-container {
     display: flex;
-    align-items: center;
     justify-content: center;
-    gap: 15px;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
 }
 
 .logo-image {
-    width: 60px;
+    width: 100%;
+    max-width: 280px;
     height: auto;
-    filter: drop-shadow(0 0 10px rgba(155, 28, 49, 0.4));
-}
-
-h1 {
-    font-weight: 700;
-    letter-spacing: 2px;
-    font-size: 2rem;
+    filter: drop-shadow(0 4px 20px rgba(230, 57, 70, 0.3));
 }
 
 .subtitle {
     color: var(--text-muted);
-    font-size: 0.9rem;
-    font-weight: 600;
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
 }
 
 .glass-panel {
     background: var(--panel-bg);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
-    border-radius: 12px;
-    padding: 30px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    border-radius: 16px;
+    padding: 35px 30px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
 }
 
+/* Segmented Control for Tabs */
 .tabs {
     display: flex;
-    gap: 10px;
-    margin-bottom: 25px;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 10px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 30px;
+    border: 1px solid var(--border-color);
 }
 
 .tab-btn {
+    flex: 1;
     background: transparent;
     border: none;
     color: var(--text-muted);
     font-family: inherit;
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
-    padding: 8px 15px;
-    border-radius: 6px;
-    transition: all 0.3s ease;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .tab-btn:hover {
     color: var(--text-color);
-    background: rgba(255,255,255,0.05);
 }
 
 .tab-btn.active {
-    color: var(--primary-color);
-    background: rgba(155, 28, 49, 0.1);
+    color: #fff;
+    background: var(--primary-gradient);
+    box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3);
 }
 
 .input-group {
-    margin-bottom: 20px;
+    margin-bottom: 22px;
 }
 
 label {
@@ -116,30 +115,38 @@ label {
     color: var(--text-muted);
     font-size: 0.85rem;
     margin-bottom: 8px;
-    margin-left: 5px;
     font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 textarea, input[type="password"], input[type="text"] {
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.25);
     color: var(--text-color);
     border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 12px;
+    border-radius: 10px;
+    padding: 14px 16px;
     font-family: inherit;
-    font-size: 0.95rem;
-    transition: border-color 0.3s ease;
+    font-size: 1rem;
+    transition: all 0.2s ease;
     outline: none;
 }
 
 textarea {
     resize: vertical;
-    min-height: 100px;
+    min-height: 110px;
+    line-height: 1.5;
 }
 
 textarea:focus, input:focus {
     border-color: var(--border-focus);
+    background-color: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.15);
+}
+
+textarea::placeholder, input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
 }
 
 .password-wrapper {
@@ -150,7 +157,7 @@ textarea:focus, input:focus {
 
 #toggle-visibility {
     position: absolute;
-    right: 10px;
+    right: 15px;
     background: transparent;
     border: none;
     color: var(--text-muted);
@@ -167,7 +174,8 @@ textarea:focus, input:focus {
 .action-buttons {
     display: flex;
     gap: 15px;
-    margin-bottom: 25px;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 
 button {
@@ -181,38 +189,55 @@ button {
 
 .primary-btn {
     flex: 2;
-    background-color: var(--primary-color);
+    background: var(--primary-gradient);
     color: white;
     border: none;
-    border-radius: 6px;
-    padding: 12px;
+    border-radius: 10px;
+    padding: 14px;
     font-weight: 700;
     font-size: 1rem;
-    transition: background-color 0.3s ease, transform 0.1s ease;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(155, 28, 49, 0.4);
 }
 
 .primary-btn:hover {
-    background-color: var(--primary-hover);
+    background: var(--primary-hover);
+    box-shadow: 0 6px 20px rgba(155, 28, 49, 0.6);
+    transform: translateY(-1px);
 }
 
 .primary-btn:active {
     transform: scale(0.98);
 }
 
+.primary-btn.decrypt-mode {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--border-color);
+    box-shadow: none;
+    color: var(--text-color);
+}
+
+.primary-btn.decrypt-mode:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
 .secondary-btn {
     flex: 1;
-    background-color: #2A2A2A;
+    background-color: transparent;
     color: var(--text-color);
-    border: none;
-    border-radius: 6px;
-    padding: 12px;
-    font-weight: 700;
-    font-size: 0.9rem;
-    transition: background-color 0.3s ease, transform 0.1s ease;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 14px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
 }
 
 .secondary-btn:hover {
-    background-color: #3A3A3A;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .secondary-btn:active {
@@ -229,36 +254,41 @@ button {
 
 #result-output {
     background-color: rgba(0, 0, 0, 0.4);
-    border: 1px dashed var(--border-color);
-    padding-right: 50px;
+    border: 1px solid var(--border-color);
+    padding-right: 55px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.9rem;
+    color: var(--text-muted);
 }
 
 .copy-btn {
     position: absolute;
     top: 10px;
     right: 10px;
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid transparent;
     color: var(--text-color);
-    width: 35px;
-    height: 35px;
-    border-radius: 6px;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s;
+    transition: all 0.2s ease;
 }
 
 .copy-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: var(--success-color);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: #fff;
 }
 
 footer {
     text-align: center;
-    margin-top: 30px;
-    color: var(--text-muted);
+    margin-top: 40px;
+    color: rgba(255, 255, 255, 0.3);
     font-size: 0.8rem;
+    font-weight: 500;
 }
 
 /* Dynamic State Colors */
