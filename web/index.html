@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GuardDex - Secure Messaging</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <!-- Using a placeholder or the actual logo if accessible -->
+                <i class="fa-solid fa-shield-halved logo-icon"></i>
+                <h1>GuardDex</h1>
+            </div>
+            <p class="subtitle">Client-Side Secure AES Encryption</p>
+        </header>
+
+        <main>
+            <div class="glass-panel">
+                <div class="tabs">
+                    <button class="tab-btn active" id="tab-encrypt">Encrypt</button>
+                    <button class="tab-btn" id="tab-decrypt">Decrypt</button>
+                </div>
+
+                <div class="input-group">
+                    <label for="message-input" id="message-label">Enter Text to Encrypt:</label>
+                    <textarea id="message-input" placeholder="Enter your secret message here..."></textarea>
+                </div>
+
+                <div class="input-group">
+                    <label for="key-input">Enter Secret Key:</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="key-input" placeholder="Super secret key...">
+                        <button id="toggle-visibility" tabindex="-1"><i class="fa-solid fa-eye"></i></button>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="action-btn" class="primary-btn">
+                        <i class="fa-solid fa-lock"></i> ENCRYPT
+                    </button>
+                    <button id="clear-btn" class="secondary-btn">
+                        <i class="fa-solid fa-trash-can"></i> CLEAR ALL
+                    </button>
+                </div>
+
+                <div class="result-group">
+                    <label>Result:</label>
+                    <div class="result-wrapper">
+                        <textarea id="result-output" readonly placeholder="Result will appear here..."></textarea>
+                        <button id="copy-btn" class="copy-btn" title="Copy to clipboard">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>100% Client-Side. Your data never leaves your browser.</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
