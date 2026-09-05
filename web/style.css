@@ -48,10 +48,10 @@ header {
     margin-bottom: 5px;
 }
 
-.logo-icon {
-    font-size: 2.5rem;
-    color: var(--primary-color);
-    filter: drop-shadow(0 0 10px rgba(155, 28, 49, 0.5));
+.logo-image {
+    width: 60px;
+    height: auto;
+    filter: drop-shadow(0 0 10px rgba(155, 28, 49, 0.4));
 }
 
 h1 {
