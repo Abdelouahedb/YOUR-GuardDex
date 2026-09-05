@@ -159,7 +159,7 @@ tabDecrypt.addEventListener('click', () => {
     tabEncrypt.classList.remove('active');
     messageLabel.innerText = 'Enter Text to Decrypt:';
     messageInput.placeholder = 'Paste encrypted text here (starts with v2:)...';
-    actionBtn.innerHTML = '<i class="fa-solid fa-lock-open"></i> DECRYPT';
+    actionBtn.innerHTML = '<i class="fa-solid fa-unlock"></i> DECRYPT';
     actionBtn.classList.add('decrypt-mode');
 });
 

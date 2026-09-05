@@ -1,16 +1,14 @@
 :root {
-    --bg-color: #050505;
-    --panel-bg: rgba(20, 20, 20, 0.6);
-    --primary-color: #E63946;
-    --primary-gradient: linear-gradient(135deg, #E63946 0%, #9B1C31 100%);
-    --primary-hover: linear-gradient(135deg, #F15A65 0%, #B8253E 100%);
-    --text-color: #F8F9FA;
-    --text-muted: #A0AEC0;
-    --border-color: rgba(255, 255, 255, 0.08);
-    --border-focus: #E63946;
+    --bg-color: #0a0a0a;
+    --panel-bg: rgba(24, 24, 27, 0.7);
+    --primary-color: #ef4444;
+    --primary-hover: #dc2626;
+    --text-color: #fafafa;
+    --text-muted: #a1a1aa;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --border-focus: #ef4444;
     --success-color: #10B981;
     --error-color: #EF4444;
-    --glass-border: rgba(255, 255, 255, 0.1);
 }
 
 * {
@@ -20,80 +18,80 @@
 }
 
 body {
-    font-family: 'Montserrat', 'Segoe UI', system-ui, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: radial-gradient(circle at 50% 0%, rgba(155, 28, 49, 0.15) 0%, var(--bg-color) 60%);
-    background-attachment: fixed;
 }
 
 .container {
     width: 100%;
-    max-width: 560px;
+    max-width: 520px;
     padding: 20px;
 }
 
 header {
     text-align: center;
-    margin-bottom: 35px;
+    margin-bottom: 25px;
 }
 
 .logo-container {
     display: flex;
+    align-items: center;
     justify-content: center;
-    margin-bottom: 15px;
+    gap: 12px;
+    margin-bottom: 8px;
 }
 
-.logo-image {
-    width: 100%;
-    max-width: 280px;
-    height: auto;
-    filter: drop-shadow(0 4px 20px rgba(230, 57, 70, 0.3));
+.logo-icon {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
 .subtitle {
     color: var(--text-muted);
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     font-weight: 500;
-    letter-spacing: 0.5px;
 }
 
 .glass-panel {
     background: var(--panel-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: 16px;
-    padding: 35px 30px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 10px 40px -10px rgba(239, 68, 68, 0.15);
 }
 
-/* Segmented Control for Tabs */
+/* Tabs */
 .tabs {
     display: flex;
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 10px;
-    padding: 4px;
-    margin-bottom: 30px;
-    border: 1px solid var(--border-color);
+    gap: 20px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 25px;
 }
 
 .tab-btn {
-    flex: 1;
     background: transparent;
     border: none;
     color: var(--text-muted);
     font-family: inherit;
-    font-size: 0.95rem;
-    font-weight: 600;
+    font-size: 0.9rem;
+    font-weight: 500;
     cursor: pointer;
-    padding: 10px 15px;
-    border-radius: 8px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 10px 5px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
 }
 
 .tab-btn:hover {
@@ -101,48 +99,44 @@ header {
 }
 
 .tab-btn.active {
-    color: #fff;
-    background: var(--primary-gradient);
-    box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3);
+    color: var(--text-color);
+    border-bottom: 2px solid var(--primary-color);
 }
 
 .input-group {
-    margin-bottom: 22px;
+    margin-bottom: 20px;
 }
 
 label {
     display: block;
     color: var(--text-muted);
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     margin-bottom: 8px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-weight: 500;
 }
 
 textarea, input[type="password"], input[type="text"] {
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.25);
+    background-color: rgba(0, 0, 0, 0.2);
     color: var(--text-color);
     border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 14px 16px;
+    border-radius: 8px;
+    padding: 12px;
     font-family: inherit;
-    font-size: 1rem;
+    font-size: 0.95rem;
     transition: all 0.2s ease;
     outline: none;
 }
 
 textarea {
     resize: vertical;
-    min-height: 110px;
+    min-height: 100px;
     line-height: 1.5;
 }
 
 textarea:focus, input:focus {
     border-color: var(--border-focus);
-    background-color: rgba(0, 0, 0, 0.4);
-    box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.15);
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.15);
 }
 
 textarea::placeholder, input::placeholder {
@@ -157,14 +151,14 @@ textarea::placeholder, input::placeholder {
 
 #toggle-visibility {
     position: absolute;
-    right: 15px;
+    right: 12px;
     background: transparent;
     border: none;
     color: var(--text-muted);
     cursor: pointer;
-    font-size: 1.1rem;
-    padding: 5px;
-    transition: color 0.3s;
+    font-size: 1rem;
+    padding: 4px;
+    transition: color 0.2s;
 }
 
 #toggle-visibility:hover {
@@ -173,9 +167,9 @@ textarea::placeholder, input::placeholder {
 
 .action-buttons {
     display: flex;
-    gap: 15px;
-    margin-top: 30px;
-    margin-bottom: 30px;
+    gap: 12px;
+    margin-top: 25px;
+    margin-bottom: 25px;
 }
 
 button {
@@ -189,22 +183,18 @@ button {
 
 .primary-btn {
     flex: 2;
-    background: var(--primary-gradient);
+    background: var(--primary-color);
     color: white;
     border: none;
-    border-radius: 10px;
-    padding: 14px;
-    font-weight: 700;
-    font-size: 1rem;
-    letter-spacing: 0.5px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(155, 28, 49, 0.4);
+    border-radius: 8px;
+    padding: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
 }
 
 .primary-btn:hover {
     background: var(--primary-hover);
-    box-shadow: 0 6px 20px rgba(155, 28, 49, 0.6);
-    transform: translateY(-1px);
 }
 
 .primary-btn:active {
@@ -212,32 +202,30 @@ button {
 }
 
 .primary-btn.decrypt-mode {
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--border-color);
-    box-shadow: none;
     color: var(--text-color);
 }
 
 .primary-btn.decrypt-mode:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .secondary-btn {
     flex: 1;
     background-color: transparent;
-    color: var(--text-color);
+    color: var(--text-muted);
     border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 14px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    transition: all 0.3s ease;
+    border-radius: 8px;
+    padding: 12px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
 }
 
 .secondary-btn:hover {
     background-color: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.2);
+    color: var(--text-color);
 }
 
 .secondary-btn:active {
@@ -253,24 +241,23 @@ button {
 }
 
 #result-output {
-    background-color: rgba(0, 0, 0, 0.4);
-    border: 1px solid var(--border-color);
-    padding-right: 55px;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    font-size: 0.9rem;
+    background-color: rgba(0, 0, 0, 0.3);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.85rem;
     color: var(--text-muted);
+    padding-right: 45px;
 }
 
 .copy-btn {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 8px;
+    right: 8px;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid transparent;
-    color: var(--text-color);
-    width: 38px;
-    height: 38px;
-    border-radius: 8px;
+    color: var(--text-muted);
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -279,16 +266,14 @@ button {
 
 .copy-btn:hover {
     background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.15);
-    color: #fff;
+    color: var(--text-color);
 }
 
 footer {
     text-align: center;
-    margin-top: 40px;
-    color: rgba(255, 255, 255, 0.3);
-    font-size: 0.8rem;
-    font-weight: 500;
+    margin-top: 30px;
+    color: rgba(255, 255, 255, 0.2);
+    font-size: 0.75rem;
 }
 
 /* Dynamic State Colors */

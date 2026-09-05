@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GuardDex - Secure Messaging</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -13,7 +13,8 @@
     <div class="container">
         <header>
             <div class="logo-container">
-                <img src="logo.png" alt="GuardDex Logo" class="logo-image">
+                <i class="fa-solid fa-shield logo-icon"></i>
+                <h1>GuardDex</h1>
             </div>
             <p class="subtitle">Client-Side Secure AES Encryption</p>
         </header>
@@ -43,7 +44,7 @@
                         <i class="fa-solid fa-lock"></i> ENCRYPT
                     </button>
                     <button id="clear-btn" class="secondary-btn">
-                        <i class="fa-solid fa-trash-can"></i> CLEAR ALL
+                        <i class="fa-solid fa-trash"></i> CLEAR ALL
                     </button>
                 </div>
 
@@ -52,7 +53,7 @@
                     <div class="result-wrapper">
                         <textarea id="result-output" readonly placeholder="Result will appear here..."></textarea>
                         <button id="copy-btn" class="copy-btn" title="Copy to clipboard">
-                            <i class="fa-regular fa-copy"></i>
+                            <i class="fa-solid fa-copy"></i>
                         </button>
                     </div>
                 </div>
