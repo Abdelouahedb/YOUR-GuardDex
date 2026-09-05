@@ -12,6 +12,16 @@ const toggleVisBtn = document.getElementById('toggle-visibility');
 
 let currentMode = 'encrypt'; // 'encrypt' or 'decrypt'
 
+// Stroke-based SVG Icons (consistent 2px stroke, geometric linecap/linejoin)
+const ICONS = {
+    lock: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`,
+    unlock: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>`,
+    eye: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>`,
+    eyeOff: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path><line x1="2" x2="22" y1="2" y2="22"></line></svg>`,
+    copy: `<svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`,
+    check: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`
+};
+
 // --- Crypto Functions ---
 
 // Convert ArrayBuffer to Base64
@@ -35,7 +45,7 @@ function base64ToUint8Array(base64) {
     return bytes;
 }
 
-// Derive AES key using PBKDF2
+// Derive AES key using PBKDF2 (100,000 iterations, SHA-256)
 async function deriveKey(password, salt) {
     const enc = new TextEncoder();
     const keyMaterial = await window.crypto.subtle.importKey(
@@ -60,6 +70,7 @@ async function deriveKey(password, salt) {
     );
 }
 
+// Encrypt v2 format: salt(16) + iv(12) + tag(16) + ciphertext
 async function encryptMessage(text, password) {
     const enc = new TextEncoder();
     const salt = window.crypto.getRandomValues(new Uint8Array(16));
@@ -76,17 +87,7 @@ async function encryptMessage(text, password) {
         enc.encode(text)
     );
     
-    // WebCrypto returns ciphertext + tag appended.
-    // Our Python code structure: salt (16) + iv (12) + tag (16) + ciphertext (N)
-    // Actually in cryptography.hazmat, AES-GCM output is just ciphertext. The tag is separate.
-    // In our Python `encrypt_v2`: encrypted_data = salt + iv + encryptor.tag + ciphertext
-    
     const encryptedBytes = new Uint8Array(encryptedContent);
-    
-    // In Web Crypto, AES-GCM appends the 16-byte authentication tag to the END of the ciphertext.
-    // So `encryptedBytes` = ciphertext + tag.
-    // We need to rearrange it to: salt + iv + tag + ciphertext to match Python's format.
-    
     const ciphertext = encryptedBytes.slice(0, encryptedBytes.length - 16);
     const tag = encryptedBytes.slice(encryptedBytes.length - 16);
     
@@ -99,6 +100,7 @@ async function encryptMessage(text, password) {
     return "v2:" + arrayBufferToBase64(combined);
 }
 
+// Decrypt v2 format
 async function decryptMessage(encryptedText, password) {
     if (!encryptedText.startsWith("v2:")) {
         throw new Error("Only v2 encrypted messages are supported on the web version.");
@@ -108,7 +110,7 @@ async function decryptMessage(encryptedText, password) {
     const data = base64ToUint8Array(base64Data);
     
     if (data.length < 44) {
-        throw new Error("Invalid encrypted data format.");
+        throw new Error("Invalid encrypted payload format.");
     }
     
     const salt = data.slice(0, 16);
@@ -116,7 +118,6 @@ async function decryptMessage(encryptedText, password) {
     const tag = data.slice(28, 44);
     const ciphertext = data.slice(44);
     
-    // Web Crypto expects ciphertext + tag for decryption
     const ciphertextAndTag = new Uint8Array(ciphertext.length + 16);
     ciphertextAndTag.set(ciphertext, 0);
     ciphertextAndTag.set(tag, ciphertext.length);
@@ -136,7 +137,7 @@ async function decryptMessage(encryptedText, password) {
         const dec = new TextDecoder();
         return dec.decode(decryptedContent);
     } catch (e) {
-        throw new Error("Decryption failed! Check your key.");
+        throw new Error("Decryption failed. Please check your key and try again.");
     }
 }
 
@@ -147,9 +148,11 @@ tabEncrypt.addEventListener('click', () => {
     currentMode = 'encrypt';
     tabEncrypt.classList.add('active');
     tabDecrypt.classList.remove('active');
-    messageLabel.innerText = 'Enter Text to Encrypt:';
+    messageLabel.innerText = 'Enter Text to Encrypt';
     messageInput.placeholder = 'Enter your secret message here...';
-    actionBtn.innerHTML = '<i class="fa-solid fa-lock"></i> ENCRYPT';
+    
+    actionBtn.querySelector('.btn-icon').innerHTML = ICONS.lock;
+    actionBtn.querySelector('.btn-text').textContent = 'ENCRYPT';
     actionBtn.classList.remove('decrypt-mode');
 });
 
@@ -157,17 +160,19 @@ tabDecrypt.addEventListener('click', () => {
     currentMode = 'decrypt';
     tabDecrypt.classList.add('active');
     tabEncrypt.classList.remove('active');
-    messageLabel.innerText = 'Enter Text to Decrypt:';
+    messageLabel.innerText = 'Enter Ciphertext to Decrypt';
     messageInput.placeholder = 'Paste encrypted text here (starts with v2:)...';
-    actionBtn.innerHTML = '<i class="fa-solid fa-unlock"></i> DECRYPT';
+    
+    actionBtn.querySelector('.btn-icon').innerHTML = ICONS.unlock;
+    actionBtn.querySelector('.btn-text').textContent = 'DECRYPT';
     actionBtn.classList.add('decrypt-mode');
 });
 
 // Toggle Password Visibility
 toggleVisBtn.addEventListener('click', () => {
-    const type = keyInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    keyInput.setAttribute('type', type);
-    toggleVisBtn.innerHTML = type === 'password' ? '<i class="fa-solid fa-eye"></i>' : '<i class="fa-solid fa-eye-slash"></i>';
+    const isPassword = keyInput.getAttribute('type') === 'password';
+    keyInput.setAttribute('type', isPassword ? 'text' : 'password');
+    toggleVisBtn.innerHTML = isPassword ? ICONS.eyeOff : ICONS.eye;
 });
 
 // Clear All
@@ -176,17 +181,17 @@ clearBtn.addEventListener('click', () => {
     keyInput.value = '';
     resultOutput.value = '';
     resultOutput.className = '';
+    messageInput.focus();
 });
 
 // Copy Result
 copyBtn.addEventListener('click', () => {
     if (resultOutput.value) {
         navigator.clipboard.writeText(resultOutput.value).then(() => {
-            const originalHtml = copyBtn.innerHTML;
-            copyBtn.innerHTML = '<i class="fa-solid fa-check text-success"></i>';
+            copyBtn.innerHTML = ICONS.check;
             setTimeout(() => {
-                copyBtn.innerHTML = originalHtml;
-            }, 2000);
+                copyBtn.innerHTML = ICONS.copy;
+            }, 1800);
         });
     }
 });
@@ -197,7 +202,7 @@ actionBtn.addEventListener('click', async () => {
     const key = keyInput.value;
     
     if (!text || !key) {
-        alert("Please provide both text and key.");
+        alert("Please provide both the message and encryption key.");
         return;
     }
     
@@ -207,14 +212,15 @@ actionBtn.addEventListener('click', async () => {
         if (currentMode === 'encrypt') {
             const encrypted = await encryptMessage(text, key);
             resultOutput.value = encrypted;
-            resultOutput.classList.add('text-error');
+            resultOutput.classList.add('has-content', 'text-error');
         } else {
             const decrypted = await decryptMessage(text, key);
             resultOutput.value = decrypted;
-            resultOutput.classList.add('text-success');
+            resultOutput.classList.add('has-content', 'text-success');
         }
     } catch (err) {
-        alert("Error: " + err.message);
+        alert(err.message);
         resultOutput.value = '';
+        resultOutput.classList.remove('has-content');
     }
 });
